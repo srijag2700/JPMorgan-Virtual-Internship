@@ -1,0 +1,106 @@
+From 1ae933f87a428b60936bae4dfcb242e2aa0f0671 Mon Sep 17 00:00:00 2001
+From: Srija Gottiparthi <srija.gottiparthi@gmail.com>
+Date: Tue, 12 May 2020 18:57:56 -0400
+Subject: [PATCH] Create Patch File - Task 1 Complete
+
+---
+ .../__pycache__/client3.cpython-38.pyc           | Bin 0 -> 1189 bytes
+ .../JPMC-tech-task-1-py3/client3.py              |  10 +++++++---
+ .../JPMC-tech-task-1-py3/client_test.py          |   7 +++++--
+ 3 files changed, 12 insertions(+), 5 deletions(-)
+ create mode 100644 Task 1 - StockPriceDataFeed/JPMC-tech-task-1-py3/__pycache__/client3.cpython-38.pyc
+
+diff --git a/Task 1 - StockPriceDataFeed/JPMC-tech-task-1-py3/__pycache__/client3.cpython-38.pyc b/Task 1 - StockPriceDataFeed/JPMC-tech-task-1-py3/__pycache__/client3.cpython-38.pyc
+new file mode 100644
+index 0000000000000000000000000000000000000000..46de93ab903d2d6178ed02bc14b08c8e8b343c09
+GIT binary patch
+literal 1189
+zcmYjROK%%D5GHrI(#n=xH-4(QumyrfKovX4B@ogkt(_Eo8BSam2%&bdUXHA_SGzJv
+z1+gNZlpi7=^A~z9dgxEsV|&WIr=B{bY$GJ*$>HqG$H5*p8Vdy14}bsu+aEPT{;|e~
+z3w`7XlKu;sB$8%CP$xa%Iq3`ENhX-|L?C@pkxT|}iKxnotfCB|Cc{%t{Rs=O2$d<F
+z(p~cFYf%S()&P34H2VmG*)p&hyCj$NlFmN1Qrt?3Sb<v@yDe6s3aeAvWnxXNiw&^}
+zo3H|Fj|enn4c1^CHej>I*2$Doa`qa%3lPGJTx=5L^(L8mS7$#;dO%u@_t+2F8-Ln2
+zX4u)<%8De;`h_-~huaUgx6VeO&L5}p%QqM4zm$*!>1G9}F{B+N{RG(racPnZYOLlp
+ziS+S%^ulvCyRrR=H}N-!3~rMPHlfy<upYx|D&r2{SA`rUz~e0AMUR_4@Ekyb<gemv
+z1e%+IA43i*HW<WZY~o>&=7yJnHbrt;R!uRCj#60$LzN~lw_|<!-op}Gv<!M#5t~*}
+z24|zffU@qgh8LoFd<|pgs<Pd^BWe-Ff3K2G_fUh<U9HlSxVu{<qXFbbcfa5NsZhsp
+z&UgB;2L4N`%qY(IcR41{bw3?;f5w#jK5z2_Tj9PfYZvQ&hJD%FJ8c6=zilw8eZM_C
+zf6z^`6jMLAH#{%v$6##mzH1UI(QZ=xkS^n{Q`JCUVw<>LR=4EdWfhePl@#Z$F1-VM
+znF+m35Nm(@8UGdxM;z0_BJH}5Vjk!6N<ZStzW1I3pyi3`Rmin+<PPSnj)7%}wZ5?V
+zT4?DCGQvX2s9JKTQ8b9tJc`DjKexzBen<1z@Vkh8=Z^k@WB*RN&!E;Chb|k&mHyY?
+z?3DiQ(`T(u#L`G*S$cF&0nVp3qB6HjX3_x&cA|^CtSIcG7>MBc;nNo{OS<Q9x+x@&
+z2M|RiOYx1$0Ar7#q){2*Xh<!p*O{xBxflYb>lJDco02JrWm$2PqeaD4s#S>Xxj9ny
+zKcVacx!G|en41q^vZJKtSUnoxpl9&a8oD$`7E-r;<})v>;r5p)_ZfPZk=DKc0l%s<
+AWB>pF
+
+literal 0
+HcmV?d00001
+
+diff --git a/Task 1 - StockPriceDataFeed/JPMC-tech-task-1-py3/client3.py b/Task 1 - StockPriceDataFeed/JPMC-tech-task-1-py3/client3.py
+index f1771c3..cf5d48e 100644
+--- a/Task 1 - StockPriceDataFeed/JPMC-tech-task-1-py3/client3.py	
++++ b/Task 1 - StockPriceDataFeed/JPMC-tech-task-1-py3/client3.py	
+@@ -35,14 +35,16 @@ def getDataPoint(quote):
+ 	stock = quote['stock']
+ 	bid_price = float(quote['top_bid']['price'])
+ 	ask_price = float(quote['top_ask']['price'])
+-	price = bid_price
++	price = (bid_price + ask_price)/2
+ 	return stock, bid_price, ask_price, price
+ 
+ def getRatio(price_a, price_b):
+ 	""" Get ratio of price_a and price_b """
+ 	""" ------------- Update this function ------------- """
+ 	""" Also create some unit tests for this function in client_test.py """
+-	return 1
++	if (price_b == 0):
++		return
++	return price_a/price_b
+ 
+ # Main
+ if __name__ == "__main__":
+@@ -52,8 +54,10 @@ if __name__ == "__main__":
+ 		quotes = json.loads(urllib.request.urlopen(QUERY.format(random.random())).read())
+ 
+ 		""" ----------- Update to get the ratio --------------- """
++		prices = {}
+ 		for quote in quotes:
+ 			stock, bid_price, ask_price, price = getDataPoint(quote)
++			prices[stock] = price
+ 			print ("Quoted %s at (bid:%s, ask:%s, price:%s)" % (stock, bid_price, ask_price, price))
+ 
+-		print ("Ratio %s" % getRatio(price, price))
++		print ("Ratio %s" % getRatio(prices['ABC'], prices['DEF']))
+diff --git a/Task 1 - StockPriceDataFeed/JPMC-tech-task-1-py3/client_test.py b/Task 1 - StockPriceDataFeed/JPMC-tech-task-1-py3/client_test.py
+index af2bf26..bc510a0 100644
+--- a/Task 1 - StockPriceDataFeed/JPMC-tech-task-1-py3/client_test.py	
++++ b/Task 1 - StockPriceDataFeed/JPMC-tech-task-1-py3/client_test.py	
+@@ -1,5 +1,5 @@
+ import unittest
+-from client3 import getDataPoint
++from client3 import getDataPoint, getRatio
+ 
+ class ClientTest(unittest.TestCase):
+   def test_getDataPoint_calculatePrice(self):
+@@ -8,6 +8,8 @@ class ClientTest(unittest.TestCase):
+       {'top_ask': {'price': 121.68, 'size': 4}, 'timestamp': '2019-02-11 22:06:30.572453', 'top_bid': {'price': 117.87, 'size': 81}, 'id': '0.109974697771', 'stock': 'DEF'}
+     ]
+     """ ------------ Add the assertion below ------------ """
++    for quote in quotes:
++      self.assertEqual(getDataPoint(quote), (quote['stock'], quote['top_bid']['price'], quote['top_ask']['price'], (quote['top_bid']['price'] + quote['top_ask']['price'])/2))
+ 
+   def test_getDataPoint_calculatePriceBidGreaterThanAsk(self):
+     quotes = [
+@@ -15,7 +17,8 @@ class ClientTest(unittest.TestCase):
+       {'top_ask': {'price': 121.68, 'size': 4}, 'timestamp': '2019-02-11 22:06:30.572453', 'top_bid': {'price': 117.87, 'size': 81}, 'id': '0.109974697771', 'stock': 'DEF'}
+     ]
+     """ ------------ Add the assertion below ------------ """
+-
++    for quote in quotes:
++      self.assertEqual(getDataPoint(quote), (quote['stock'], quote['top_bid']['price'], quote['top_ask']['price'], (quote['top_bid']['price'] + quote['top_ask']['price'])/2))
+ 
+   """ ------------ Add more unit tests ------------ """
+ 
+-- 
+2.24.1.windows.2
+
